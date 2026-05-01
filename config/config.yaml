@@ -1,3 +1,8 @@
 stream_url: "http://172.20.10.4:8080/video"
 distance_threshold: 150
-model_path: "models/yolov8n.pt"
+model:
+  type: fastercnn
+  num_classes: 5
+  checkpoint: "models/fasterrcnn_regnetx040.pth"
+  score_threshold: 0.6
+

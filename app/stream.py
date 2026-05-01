@@ -9,7 +9,7 @@ MAX_FAILS = 10
 
 
 def connect_stream():
-    cap = cv2.VideoCapture(PHONE_STREAM_URL)
+    cap = cv2.VideoCapture(PHONE_STREAM_URL, cv2.CAP_FFMPEG)
     cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
     return cap
 
@@ -24,6 +24,11 @@ def get_frame():
         print("[WARN] Reconnecting stream...")
         cap = connect_stream()
         time.sleep(1)
+
+    # CRITICAL: flush buffer
+
+    for _ in range(5):
+        cap.grab()
 
     ret, frame = cap.read()
 

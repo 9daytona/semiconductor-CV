@@ -1,21 +1,18 @@
-from ultralytics import YOLO
 
-model = YOLO("yolov8n.pt")
+from detector.fasterrcnn_adapter import FasterRCNNDetector
+import yaml
+
+with open("config/config.yaml") as f:
+    cfg = yaml.safe_load(f)
+
+model = FasterRCNNDetector(
+    num_classes=cfg["model"]["num_classes"],
+    checkpoint_path=cfg["model"]["checkpoint"],
+    score_threshold=cfg["model"]["score_threshold"],
+    device="cuda"
+)
 
 def detect_objects(frame):
-    results = model(frame)[0]
+    results = model.predict(frame)
 
-    detections = []
-
-    for box in results.boxes:
-       cls = int(box.cls[0])
-       conf = float(box.conf[0])
-       x1,y1,x2,y2 = map(int, box.xyxy[0])
-
-       detections.append({
-         "bbox":(x1,y1,x2,y2),
-         "class": model.names[cls],
-         "conf": conf
-       })
-
-    return detections
+    return results

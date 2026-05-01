@@ -9,23 +9,17 @@ semiconductor-safety-cv/
 │   ├── stream.py            # video capture utilities
 │   ├── detection.py         # YOLO inference wrapper
 │   ├── rules.py             # proximity + safety logic
-│   ├── overlay.py           # drawing boxes + alerts
-│   └── agent.py             # evaluation agent
+│   ├── yolov8n.pt           # model weights (or downloaded at runtime)
+│   └── overlay.py           # drawing boxes + alerts
 │
 ├── server/
 │   └── server.py            # Flask alert server
 │
-├── models/
-│   └── yolov8n.pt           # model weights (or downloaded at runtime)
 │
 ├── config/
 │   └── config.yaml          # thresholds, stream URL
 │
-├── scripts/
-│   └── run.sh               # run pipeline
 │
+├── yolov8n.pt           # model weights (or downloaded at runtime)
 ├── requirements.txt
-├── README.md
-└── .devcontainer/
-    ├── devcontainer.json
-    └── Dockerfile
+└── README.md

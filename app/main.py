@@ -2,31 +2,46 @@ import cv2
 from stream import get_frame
 from detection import detect_objects
 from rules import evaluate_safety
-from overlay import draw_overlay
+from overlay import Overlay
+
+
+overlay = Overlay(class_names={
+    0: "background",
+    1: "person",
+    2: "gloves",
+    3: "mask",
+    4: "wafer"
+})
 
 while True:
     frame = get_frame()
-    # preprocessing at ingestion
-    # frame = cv2.resize(frame, (640, 480))   
-    # frame = cv2.GaussianBlur(frame, (5, 5), 0)
     if frame is None:
         continue
+    # frame = cv2.resize(frame, (640, 480))  # Optional preprocessing
+    # frame = cv2.GaussianBlur(frame, (5, 5), 0)
 
-    detections = detect_objects(frame)
-    print("DETECTIONS:", detections)
-    tracks = detections # temporary fallback
-    alerts = evaluate_safety(detections)
+    # Faster R-CNN detection
+    results = detect_objects(frame)
 
-    output = draw_overlay(frame, detections, alerts)    #Bypassing tracking temporarily
+    if not results:
+        continue
 
-    cv2.imshow("Safety Monitor", output)
+    results = results[0] 
+
+    # Rules engine
+    alerts = evaluate_safety(results)
+
+
+    # Overlay rendering 
+    frame = overlay.draw_detections(frame, results)
+    frame = overlay.draw_alerts(frame, alerts)
+
+    # Display
+    cv2.imshow("Safety Monitor", frame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-cv2.destroyAllWindows
-
-
-print("TRACKS:", tracks)
+cv2.destroyAllWindows()
 
     
