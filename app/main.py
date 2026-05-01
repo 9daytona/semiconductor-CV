@@ -4,7 +4,7 @@ from ultralytics import YOLO
 import time
 
 #  CONFIG 
-PHONE_STREAM_URL = "http://192.168.1.5:8080/video"  # change this
+PHONE_STREAM_URL = "http://172.20.10.4:8080/video"  # change this
 DIST_THRESHOLD = 150  # pixel distance threshold for alert
 MODEL_PATH = "yolov8n.pt"  # small model for speed
 
